@@ -15,8 +15,20 @@ func bar() error {
 	return errs.Trace(foo())
 }
 
-func TestTrace(t *testing.T) {
+func TestTrace_Function(t *testing.T) {
 	t.Log(errs.Trace(bar()))
+}
+
+type _Foo struct {
+}
+
+func (foo *_Foo) sayHi() error {
+	return errs.Trace(errs.ErrPermissionDenied)
+}
+
+func TestTrace_Method(t *testing.T) {
+	foo := &_Foo{}
+	t.Log(errs.Trace(foo.sayHi()))
 }
 
 func TestTraceNil(t *testing.T) {
