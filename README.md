@@ -1,3 +1,6 @@
+[![Go](https://github.com/ericuni/errorx/actions/workflows/go.yml/badge.svg)](
+https://github.com/ericuni/errorx/actions/workflows/go.yml)
+
 # usage
 ```go
 import "github.com/ericuni/errorx"
