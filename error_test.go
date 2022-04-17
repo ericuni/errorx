@@ -34,31 +34,57 @@ func (s *ErrorSuite) TestStandardError() {
 	assert.True(errors.Is(err, errNotFound))
 }
 
-type MyError struct {
+type PointerError struct {
 	Code int32
 	Msg  string
 }
 
-func (e *MyError) Error() string {
+func (e *PointerError) Error() string {
+	return fmt.Sprintf("%d %s", e.Code, e.Msg)
+}
+
+type ValueError struct {
+	Code int32
+	Msg  string
+}
+
+func (e ValueError) Error() string {
 	return fmt.Sprintf("%d %s", e.Code, e.Msg)
 }
 
 func (s *ErrorSuite) TestMyError() {
 	assert := s.Assert()
-	// t := s.T()
+	t := s.T()
 
-	errNotFound := &MyError{
-		Code: http.StatusNotFound,
-		Msg:  "not found",
-	}
+	t.Run("pointer", func(t *testing.T) {
+		errNotFound := &PointerError{
+			Code: http.StatusNotFound,
+			Msg:  "not found",
+		}
 
-	err := errorx.Trace(errNotFound)
-	err = errorx.Tracef(err, "more")
+		err := errorx.Trace(errNotFound)
+		err = errorx.Tracef(err, "more")
 
-	assert.True(errors.Is(err, errNotFound))
+		assert.True(errors.Is(err, errNotFound))
 
-	var myErr *MyError
-	assert.True(errors.As(err, &myErr))
+		var myErr *PointerError
+		assert.True(errors.As(err, &myErr))
+	})
+
+	t.Run("value", func(t *testing.T) {
+		errNotFound := ValueError{
+			Code: http.StatusNotFound,
+			Msg:  "not found",
+		}
+
+		err := errorx.Trace(errNotFound)
+		err = errorx.Tracef(err, "more")
+
+		assert.True(errors.Is(err, errNotFound))
+
+		var myErr ValueError
+		assert.True(errors.As(err, &myErr))
+	})
 }
 
 func TestError(t *testing.T) {
