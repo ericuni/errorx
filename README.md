@@ -1,5 +1,5 @@
-[![Go](https://github.com/ericuni/errorx/actions/workflows/go.yml/badge.svg)](https://github.com/ericuni/errorx/actions/workflows/go.yml)
-[![Coverage Status](https://coveralls.io/repos/github/ericuni/errorx/badge.svg?branch=cover)](https://coveralls.io/github/ericuni/errorx?branch=cover)
+[![Build Status](https://github.com/ericuni/errorx/actions/workflows/go.yml/badge.svg)](https://github.com/ericuni/errorx/actions/workflows/go.yml)
+[![Coverage Status](https://coveralls.io/repos/github/ericuni/errorx/badge.svg?branch=master)](https://coveralls.io/github/ericuni/errorx?branch=master)
 
 # usage
 ```go
