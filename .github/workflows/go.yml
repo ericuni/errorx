@@ -22,15 +22,12 @@ jobs:
       run: go build ./...
 
     - name: unit test
-      run: go test -race -gcflags=all=-l -covermode atomic -cover -coverprofile=coverage.out ./...
-
-    - name: convert coverage.out to coverage.lcov
-      uses: jandelgado/gcov2lcov-action@v1
+      run: go test -race -gcflags=all=-l -covermode count -coverprofile=coverage.out ./...
 
     - name: install goveralls
       run: go install github.com/mattn/goveralls@latest
 
-    - name: send coverage
+    - name: update coverage on coveralls.io
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: goveralls -coverprofile=coverage.out -service=github
