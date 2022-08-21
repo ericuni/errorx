@@ -1,5 +1,8 @@
+[![Golang](https://img.shields.io/badge/Language-go1.18+-blue.svg)](https://go.dev/)
 [![Build Status](https://github.com/ericuni/errorx/actions/workflows/go.yml/badge.svg)](https://github.com/ericuni/errorx/actions/workflows/go.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ericuni/errorx/badge.svg?branch=master)](https://coveralls.io/github/ericuni/errorx?branch=master)
+[![GoReport](https://goreportcard.com/badge/github.com/securego/gosec)](https://goreportcard.com/report/github.com/ericuni/errorx)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ericuni/errorx.svg)](https://pkg.go.dev/github.com/ericuni/errorx)
 
 # usage
 ```go
