@@ -6,32 +6,33 @@ import (
 	"testing"
 
 	"github.com/ericuni/errorx"
-	"github.com/stretchr/testify/suite"
+	"github.com/stretchr/testify/assert"
 )
 
-type ErrorSuite struct {
-	suite.Suite
+func TestNew(t *testing.T) {
+	err := errorx.New("oops")
+	t.Log(err)
 }
 
-func (s *ErrorSuite) TestNil() {
-	assert := s.Assert()
-	// t := s.T()
+func TestTrace(t *testing.T) {
+	assert := assert.New(t)
 
-	var err error = nil
-	assert.Nil(errorx.Trace(err))
-	assert.Nil(errorx.Tracef(err, "something happened"))
-}
+	t.Run("nil", func(t *testing.T) {
+		var err error = nil
+		assert.Nil(errorx.Trace(err))
+		assert.Nil(errorx.Tracef(err, "something happened"))
+	})
 
-func (s *ErrorSuite) TestStandardError() {
-	assert := s.Assert()
-	// t := s.T()
+	t.Run("standard error", func(t *testing.T) {
+		errNotFound := errors.New("not found")
 
-	errNotFound := errors.New("not found")
-	err := errorx.Tracef(errNotFound, "something happened")
-	assert.True(errors.Is(err, errNotFound))
+		err := errorx.Tracef(errNotFound, "something happened")
+		assert.True(errors.Is(err, errNotFound))
+		t.Log(err)
 
-	errNone := errors.New("none")
-	assert.False(errors.Is(err, errNone))
+		errNone := errors.New("none")
+		assert.False(errors.Is(err, errNone))
+	})
 }
 
 type PointerError struct {
@@ -52,9 +53,8 @@ func (e ValueError) Error() string {
 	return fmt.Sprintf("%d %s", e.code, e.msg)
 }
 
-func (s *ErrorSuite) TestMyError() {
-	assert := s.Assert()
-	t := s.T()
+func TestPointerAndValueError(t *testing.T) {
+	assert := assert.New(t)
 
 	t.Run("pointer", func(t *testing.T) {
 		errNotFound := &PointerError{
@@ -120,9 +120,8 @@ func (e ValueErrorWithMap) Error() string {
 	return fmt.Sprintf("%d %s %v", e.code, e.msg, e.extra)
 }
 
-func (s *ErrorSuite) TestNotComparable() {
-	assert := s.Assert()
-	t := s.T()
+func TestNotComparableError(t *testing.T) {
+	assert := assert.New(t)
 
 	t.Run("pointer", func(t *testing.T) {
 		errNotFound := &PointerErrorWithMap{
@@ -168,8 +167,4 @@ func (s *ErrorSuite) TestNotComparable() {
 		}
 		assert.False(errors.Is(err, errNone))
 	})
-}
-
-func TestError(t *testing.T) {
-	suite.Run(t, new(ErrorSuite))
 }
