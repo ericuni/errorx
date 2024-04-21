@@ -29,6 +29,9 @@ func TestTrace(t *testing.T) {
 		assert.True(errors.Is(err, errNotFound))
 		t.Logf("\n%+v", err)
 
+		got := errors.Unwrap(err)
+		t.Log(got)
+
 		errNone := errors.New("none")
 		assert.False(errors.Is(err, errNone))
 	})
@@ -39,6 +42,49 @@ func TestTrace(t *testing.T) {
 		err := Tracef(errNotFound, "something happened")
 		t.Logf("\n%+v", err)
 	})
+}
+
+func TestCause(t *testing.T) {
+	assert := assert.New(t)
+
+	tds := []struct {
+		name string
+		err  error
+		want error
+	}{
+		{
+			name: "nil",
+			err:  nil,
+			want: nil,
+		},
+		{
+			name: "standard error",
+			err:  errors.New("err1"),
+			want: errors.New("err1"),
+		},
+		{
+			name: "trace err",
+			err:  Trace(errors.New("err1")),
+			want: errors.New("err1"),
+		},
+		{
+			name: "more trace err",
+			err:  Trace(Trace(errors.New("err1"))),
+			want: errors.New("err1"),
+		},
+		{
+			name: "tracef err",
+			err:  Tracef(errors.New("err1"), "description"),
+			want: errors.New("err1"),
+		},
+	}
+
+	for _, td := range tds {
+		t.Run(td.name, func(t *testing.T) {
+			got := Cause(td.err)
+			assert.Equal(td.want, got)
+		})
+	}
 }
 
 type PointerError struct {

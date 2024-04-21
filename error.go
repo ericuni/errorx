@@ -1,6 +1,7 @@
 package errorx
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -23,4 +24,19 @@ func Tracef(err error, format string, args ...interface{}) error {
 		return nil
 	}
 	return fmt.Errorf("%s %s\n%w", getLocation(), fmt.Sprintf(format, args...), err)
+}
+
+func Cause(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	for {
+		next := errors.Unwrap(err)
+		if next == nil {
+			return err
+		}
+
+		err = next
+	}
 }
