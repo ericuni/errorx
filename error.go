@@ -26,6 +26,7 @@ func Tracef(err error, format string, args ...interface{}) error {
 	return fmt.Errorf("%s %s\n%w", getLocation(), fmt.Sprintf(format, args...), err)
 }
 
+// Cause return the root cause of the error
 func Cause(err error) error {
 	if err == nil {
 		return nil
